@@ -1,0 +1,14 @@
+webpack
+webpack-cli
+@babel/core
+@babel/preset-env
+html-webpack-plugin
+core-js
+mini-css-extract-plugin
+css-loader
+postcss-loader
+postcss-preset-env
+postcss-sort-media-queries
+autoprefixer
+sass
+sass-loader
