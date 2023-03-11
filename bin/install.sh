@@ -206,54 +206,54 @@ readline_and_add_dependencies_dev() {
 # Add dependencies for TypeScript.
 # TypeScriptの場合に依存関係を追加する
 if [[ $language == "typescript" ]]; then
-  readline_and_add_dependencies_dev "configs/typescript_configs/typescript-dev"
+  readline_and_add_dependencies_dev "AutoEnvSetter/configs/typescript_configs/typescript-dev"
   if [[ $framework == "react" ]]; then
-    readline_and_add_dependencies_dev "configs/typescript_configs/typescript-react-dev"
+    readline_and_add_dependencies_dev "AutoEnvSetter/configs/typescript_configs/typescript-react-dev"
   fi
   if array_contains linter eslint; then
-    readline_and_add_dependencies_dev "configs/typescript_configs/typescript-eslint-dev"
+    readline_and_add_dependencies_dev "AutoEnvSetter/configs/typescript_configs/typescript-eslint-dev"
   fi
 fi
 
 # Add dependencies for React.
 # Reactの場合に依存関係を追加する
 if [[ $framework == "react" ]]; then
-  readline_and_add_dependencies "configs/react_configs/react"
+  readline_and_add_dependencies "AutoEnvSetter/configs/react_configs/react"
   if array_contains linter eslint; then
-    readline_and_add_dependencies_dev "configs/react_configs/react-eslint-dev"
+    readline_and_add_dependencies_dev "AutoEnvSetter/configs/react_configs/react-eslint-dev"
   fi
 fi
 
 # Add dependencies for Prettier.
 # Prettierの場合に依存関係を追加する
-readline_and_add_dependencies_dev "configs/prettier_configs/prettier-dev"
+readline_and_add_dependencies_dev "AutoEnvSetter/configs/prettier_configs/prettier-dev"
 
 # Add dependencies for ESLint.
 # ESLintの場合に依存関係を追加する
 if array_contains linter eslint; then
-  readline_and_add_dependencies_dev "configs/eslint_configs/eslint-dev"
+  readline_and_add_dependencies_dev "AutoEnvSetter/configs/eslint_configs/eslint-dev"
   if [[ $formatter == "prettier" ]]; then
-    readline_and_add_dependencies_dev "configs/eslint_configs/eslint-prettier-dev"
+    readline_and_add_dependencies_dev "AutoEnvSetter/configs/eslint_configs/eslint-prettier-dev"
   fi
 fi
 
 # Add dependencies for Stylelint.
 # Stylelintの場合に依存関係を追加する
 if array_contains linter stylelint; then
-  readline_and_add_dependencies_dev "configs/stylelint_configs/stylelint-dev"
+  readline_and_add_dependencies_dev "AutoEnvSetter/configs/stylelint_configs/stylelint-dev"
   if [[ $formatter == "prettier" ]]; then
-    readline_and_add_dependencies_dev "configs/stylelint_configs/stylelint-prettier-dev"
+    readline_and_add_dependencies_dev "AutoEnvSetter/configs/stylelint_configs/stylelint-prettier-dev"
   fi
 fi
 
 # Add dependencies for Webpack.
 # Webpackの場合に依存関係を追加する
 if [[ $bundler == "webpack" ]]; then
-  readline_and_add_dependencies_dev "configs/webpack_configs/webpack-dev"
+  readline_and_add_dependencies_dev "AutoEnvSetter/configs/webpack_configs/webpack-dev"
   if [[ $language == "typescript" ]]; then
-    readline_and_add_dependencies_dev "configs/webpack_configs/webpack-typescript-dev"
+    readline_and_add_dependencies_dev "AutoEnvSetter/configs/webpack_configs/webpack-typescript-dev"
   else
-    readline_and_add_dependencies_dev "configs/webpack_configs/webpack-javascript-dev"
+    readline_and_add_dependencies_dev "AutoEnvSetter/configs/webpack_configs/webpack-javascript-dev"
   fi
 fi
 
@@ -311,7 +311,7 @@ if [[ $language == "typescript" ]]; then
       ;;
   esac
   if [[ $framework == "react" ]]; then
-    node scripts/typescript_scripts/typescript-react.js
+    node AutoEnvSetter/scripts/typescript_scripts/typescript-react.js
     prettier --write tsconfig.json
   fi
 fi
@@ -319,8 +319,8 @@ fi
 # If the formatter is Prettier, copy the .prettierignore and .prettierrc.js files to the current directory.
 # フォーマッターがPrettierの場合、.prettierignoreと.prettierrc.jsファイルを現在のディレクトリにコピーする。
 if [[ $formatter == "prettier" ]]; then
-  $FILE_COPY_COMMAND configs/prettier_configs/.prettierignore .prettierignore
-  $FILE_COPY_COMMAND configs/prettier_configs/.prettierrc.js .prettierrc.js
+  $FILE_COPY_COMMAND AutoEnvSetter/configs/prettier_configs/.prettierignore .prettierignore
+  $FILE_COPY_COMMAND AutoEnvSetter/configs/prettier_configs/.prettierrc.js .prettierrc.js
 fi
 
 # If the linter is ESLint, create the appropriate .eslintrc.js file and .eslintignore file.
@@ -328,21 +328,21 @@ fi
 if array_contains linter eslint; then
   if [[ $language == "typescript" ]]; then
     if [[ $framework == "react" ]]; then
-      $FILE_COPY_COMMAND configs/eslint_configs/.eslintrc-typescript-react.js .eslintrc.js
+      $FILE_COPY_COMMAND AutoEnvSetter/configs/eslint_configs/.eslintrc-typescript-react.js .eslintrc.js
     else
-      $FILE_COPY_COMMAND configs/eslint_configs/.eslintrc-typescript.js .eslintrc.js
+      $FILE_COPY_COMMAND AutoEnvSetter/configs/eslint_configs/.eslintrc-typescript.js .eslintrc.js
     fi
   else
     if [[ $framework == "react" ]]; then
-      $FILE_COPY_COMMAND configs/eslint_configs/.eslintrc-react.js .eslintrc.js
+      $FILE_COPY_COMMAND AutoEnvSetter/configs/eslint_configs/.eslintrc-react.js .eslintrc.js
     else
-      $FILE_COPY_COMMAND configs/eslint_configs/.eslintrc.js .eslintrc.js
+      $FILE_COPY_COMMAND AutoEnvSetter/configs/eslint_configs/.eslintrc.js .eslintrc.js
     fi
   fi
-  $FILE_COPY_COMMAND configs/eslint_configs/.eslintignore .eslintignore
+  $FILE_COPY_COMMAND AutoEnvSetter/configs/eslint_configs/.eslintignore .eslintignore
 
   if [[ $formatter == "prettier" ]]; then
-    node scripts/eslint_scripts/eslint-prettier.js
+    node AutoEnvSetter/scripts/eslint_scripts/eslint-prettier.js
     prettier --write .eslintrc.js
   fi
 fi
@@ -350,10 +350,10 @@ fi
 # If the linter is Stylelint, create the appropriate .stylelintrc.js file and .stylelintignore file.
 # リンターがStylelintの場合、適切な .stylelintrc.jsファイルと .stylelintignoreファイルを作成する。
 if array_contains linter stylelint; then
-  $FILE_COPY_COMMAND configs/stylelint_configs/.stylelintignore .stylelintignore
-  $FILE_COPY_COMMAND configs/stylelint_configs/.stylelintrc.js .stylelintrc.js
+  $FILE_COPY_COMMAND AutoEnvSetter/configs/stylelint_configs/.stylelintignore .stylelintignore
+  $FILE_COPY_COMMAND AutoEnvSetter/configs/stylelint_configs/.stylelintrc.js .stylelintrc.js
   if [[ $formatter == "prettier" ]]; then
-    node scripts/eslint_scripts/eslint-prettier.js
+    node AutoEnvSetter/scripts/eslint_scripts/eslint-prettier.js
     prettier --write .stylelintrc.js
   fi
 fi
@@ -371,33 +371,33 @@ if [[ $bundler == "webpack" ]]; then
   touch src/index.html
   touch src/styles.scss
 
-  $FILE_COPY_COMMAND configs/webpack_configs/postcss.config.js postcss.config.js
+  $FILE_COPY_COMMAND AutoEnvSetter/configs/webpack_configs/postcss.config.js postcss.config.js
   if [[ $language == "typescript" ]]; then
     if [[ $framework == "react" ]]; then
       # For TypeScript + React
       # TypeScript + Reactの場合
-      $FILE_COPY_COMMAND configs/webpack_configs/webpack.config-typescript-react.js webpack.config.js
+      $FILE_COPY_COMMAND AutoEnvSetter/configs/webpack_configs/webpack.config-typescript-react.js webpack.config.js
       touch src/index.tsx
     else
       # For TypeScript
       # TypeScriptの場合
-      $FILE_COPY_COMMAND configs/webpack_configs/webpack.config-typescript.js webpack.config.js
+      $FILE_COPY_COMMAND AutoEnvSetter/configs/webpack_configs/webpack.config-typescript.js webpack.config.js
       touch src/index.ts
     fi
   else
     if [[ $framework == "react" ]]; then
     # For JavaScript + React
     # JavaScript + Reactの場合
-     $FILE_COPY_COMMAND configs/webpack_configs/webpack.config-javascript-react.js webpack.config.js
-     $FILE_COPY_COMMAND configs/webpack_configs/.babelrc-javascript-react.js .babelrc.js
+     $FILE_COPY_COMMAND AutoEnvSetter/configs/webpack_configs/webpack.config-javascript-react.js webpack.config.js
+     $FILE_COPY_COMMAND AutoEnvSetter/configs/webpack_configs/.babelrc-javascript-react.js .babelrc.js
      touch src/index.jsx
     else
       # For JavaScript
       # JavaScript
-      $FILE_COPY_COMMAND configs/webpack_configs/webpack.config-javascript.js webpack.config.js
+      $FILE_COPY_COMMAND AutoEnvSetter/configs/webpack_configs/webpack.config-javascript.js webpack.config.js
       touch src/index.js
     fi
   fi
-  node scripts/webpack_scripts/_webpack.js
+  node AutoEnvSetter/scripts/webpack_scripts/_webpack.js
   prettier --write package.json
 fi

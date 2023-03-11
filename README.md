@@ -9,12 +9,26 @@ AutoEnvSetter is a tool that allows you to easily build a Javascript/Typescript 
 
 To use AutoEnvSetter, you can run the script locally by following these steps:
 
-1. Download zip file [here](https://github.com/HoshimuraYuto/AutoEnvSetter/archive/refs/heads/main.zip).
-2. Unzip the file.
-3. Run `bin/install.sh` from the unzipped directory.
+1. Create your own project directory and move to the project directory.
 
 ```sh
-sh bin/install.sh
+mkdir your/project/directory && cd your/project/directory
+```
+
+2. Download the ZIP file from [here](https://github.com/HoshimuraYuto/AutoEnvSetter/archive/refs/heads/main.zip) to the root of your project directory.
+
+```
+🗂 (Project directory)
+└── 🗂 AutoEnvSetter
+    ├── 🗂 bin
+    │   └── 📄 install.sh
+```
+
+3. Unzip the file.
+4. Run `sh AutoEnvSetter/bin/install.sh`.
+
+```sh
+sh AutoEnvSetter/bin/install.sh
 ```
 
 ### Arguments
@@ -46,19 +60,19 @@ AutoEnvSetter currently supports the following options:
 #### pnpm+typescript+eslint+prettier+webpack
 
 ```sh
-sh bin/install.sh
+sh AutoEnvSetter/bin/install.sh
 ```
 
 #### pnpm+typescript+react+eslint+prettier+webpack
 
 ```sh
-sh bin/install.sh --framework=react
+sh AutoEnvSetter/bin/install.sh --framework=react
 ```
 
 #### pnpm+typescript+react+eslint+stylelint+prettier+webpack
 
 ```sh
-sh bin/install.sh --framework=react --linter=eslint,stylelint
+sh AutoEnvSetter/bin/install.sh --framework=react --linter=eslint,stylelint
 ```
 
 ## Compatibility
