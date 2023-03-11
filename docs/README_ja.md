@@ -9,12 +9,26 @@ AutoEnvSetter は Javascript/Typescript(+react 等)の開発環境を簡単に�
 
 AutoEnvSetter を使用するには、以下の手順でローカ環境で実行します。
 
-1. ZIP ファイルを[こちら](https://github.com/HoshimuraYuto/AutoEnvSetter/archive/refs/heads/main.zip)からダウンロードします。
-2. ファイルを解凍します。
-3. 解凍したディレクトリから `bin/install.sh` を実行します。
+1. ご自身のプロジェクトディレクトリを作成し、プロジェクトディレクトリに移動します。
 
 ```sh
-sh bin/install.sh
+mkdir your/project/directory && cd your/project/directory
+```
+
+2. プロジェクトディレクトリのルートに ZIP ファイルを[こちら](https://github.com/HoshimuraYuto/AutoEnvSetter/archive/refs/heads/main.zip)からダウンロードします。
+
+```
+🗂 (プロジェクトディレクトリ)
+└── 🗂 AutoEnvSetter
+    ├── 🗂 bin
+    │   └── 📄 install.sh
+```
+
+3. ファイルを解凍します。
+4. `sh AutoEnvSetter/bin/install.sh` を実行します。
+
+```sh
+sh AutoEnvSetter/bin/install.sh
 ```
 
 ### 引数
@@ -46,19 +60,19 @@ AutoEnvSetter は現在、以下のオプションに対応しています。
 #### pnpm+typescript+eslint+prettier+webpack
 
 ```sh
-sh bin/install.sh
+sh AutoEnvSetter/bin/install.sh
 ```
 
 #### pnpm+typescript+react+eslint+prettier+webpack
 
 ```sh
-sh bin/install.sh --framework=react
+sh AutoEnvSetter/bin/install.sh --framework=react
 ```
 
 #### pnpm+typescript+react+eslint+stylelint+prettier+webpack
 
 ```sh
-sh bin/install.sh --framework=react --linter=eslint,stylelint
+sh AutoEnvSetter/bin/install.sh --framework=react --linter=eslint,stylelint
 ```
 
 ## 互換性
