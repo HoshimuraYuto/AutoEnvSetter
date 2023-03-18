@@ -247,8 +247,8 @@ readline_and_add_dependencies_dev() {
   done < $file
 }
 
-# Add dependencies for TypeScript.
-# TypeScriptの場合に依存関係を追加する
+# Add dependencies for TypeScript/Javascript.
+# TypeScript/Javascriptの場合に依存関係を追加する
 if [[ $language == "typescript" ]]; then
   readline_and_add_dependencies_dev "AutoEnvSetter/configs/typescript_configs/typescript-dev"
   if [[ $framework == "react" ]]; then
@@ -257,6 +257,8 @@ if [[ $language == "typescript" ]]; then
   if array_contains linter eslint; then
     readline_and_add_dependencies_dev "AutoEnvSetter/configs/typescript_configs/typescript-eslint-dev"
   fi
+else
+  readline_and_add_dependencies_dev "AutoEnvSetter/configs/react_configs/react-javascript-dev"
 fi
 
 # Add dependencies for React.
@@ -295,8 +297,14 @@ fi
 if [[ $bundler == "webpack" ]]; then
   readline_and_add_dependencies_dev "AutoEnvSetter/configs/webpack_configs/webpack-dev"
   if [[ $language == "typescript" ]]; then
+    if [[ $framework == "react" ]]; then
+      readline_and_add_dependencies_dev "AutoEnvSetter/configs/webpack_configs/webpack-typescript-react-dev"
+    fi
     readline_and_add_dependencies_dev "AutoEnvSetter/configs/webpack_configs/webpack-typescript-dev"
   else
+    if [[ $framework == "react" ]]; then
+      readline_and_add_dependencies_dev "AutoEnvSetter/configs/webpack_configs/webpack-javascript-react-dev"
+    fi
     readline_and_add_dependencies_dev "AutoEnvSetter/configs/webpack_configs/webpack-javascript-dev"
   fi
 fi
@@ -456,12 +464,21 @@ if [[ $bundler == "webpack" ]]; then
   touch src/App.scss
 
   $FILE_COPY_COMMAND AutoEnvSetter/configs/webpack_configs/postcss.config.js postcss.config.js
+
+  if [[ $framework == "react" ]]; then
+    $FILE_COPY_COMMAND AutoEnvSetter/configs/html_configs/react-html-index.html src/index.html
+  else
+    $FILE_COPY_COMMAND AutoEnvSetter/configs/html_configs/html-index.html src/index.html
+  fi
+
   if [[ $language == "typescript" ]]; then
     if [[ $framework == "react" ]]; then
       # For TypeScript + React
       # TypeScript + Reactの場合
       $FILE_COPY_COMMAND AutoEnvSetter/configs/webpack_configs/webpack.config-typescript-react.js webpack.config.js
+      $FILE_COPY_COMMAND AutoEnvSetter/configs/webpack_configs/.babelrc-typescript-react.js .babelrc.js
       $FILE_COPY_COMMAND AutoEnvSetter/configs/react_configs/react-typescript-index.tsx src/index.tsx
+      $FILE_COPY_COMMAND AutoEnvSetter/configs/react_configs/react-typescript-app.tsx src/App.tsx
     else
       # For TypeScript
       # TypeScriptの場合
@@ -473,7 +490,9 @@ if [[ $bundler == "webpack" ]]; then
     # For JavaScript + React
     # JavaScript + Reactの場合
      $FILE_COPY_COMMAND AutoEnvSetter/configs/webpack_configs/webpack.config-javascript-react.js webpack.config.js
+     $FILE_COPY_COMMAND AutoEnvSetter/configs/webpack_configs/.babelrc-javascript-react.js .babelrc.js
      $FILE_COPY_COMMAND AutoEnvSetter/configs/react_configs/react-javascript-index.jsx src/index.jsx
+     $FILE_COPY_COMMAND AutoEnvSetter/configs/react_configs/react-javascript-app.jsx src/App.jsx
     else
       # For JavaScript
       # JavaScript
