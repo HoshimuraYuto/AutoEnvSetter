@@ -17,30 +17,35 @@ mkdir your/project/directory && cd your/project/directory
 
 2. プロジェクトディレクトリのルートに ZIP ファイルを[こちら](https://github.com/HoshimuraYuto/AutoEnvSetter/archive/refs/heads/main.zip)からダウンロードします。
 
+3. ファイルを解凍します。AutoEnvSetter フォルダが以下のように設置されているか確認してください。
+
 ```
 🗂 (プロジェクトディレクトリ)
 └── 🗂 AutoEnvSetter
     ├── 🗂 bin
     │   └── 📄 install.sh
+    ├── ...
 ```
 
-3. ファイルを解凍します。
 4. `sh AutoEnvSetter/bin/install.sh` を実行します。
 
 ```sh
 sh AutoEnvSetter/bin/install.sh
 ```
 
+5. もしテストに playwright を選んだ場合、`TODO: Please edit webServer in the playwright.config.ts file as follows.`という表示が出るのでその指示を守ってください。playwright によるテストが行いやすくなります。
+
 ### 引数
 
 以下の引数を渡すことができます。
 
-- `--package_manager=[package manager]`: 使用するパッケージマネージャーを指定します（例：-package_manager=yarn）。デフォルトは `pnpm` です。
-- `--language=[language]`: 使用したい言語を指定する（例：--language=javascript）。デフォルト値は `typescript` です。
-- `--framework=[framework]`: 使用したいフレームワークを指定する（例：--framework=react）。デフォルト値は `none` です。
-- `--formatter=[formatter]`: 使用するコードフォーマッタを指定する（例：--formatter=prettier）。デフォルトは `prettier` です。
-- `--linter=[linter]`: 使用したいリンターを指定する（例：--linter=eslint）。デフォルトは `eslint` です。
-- `--bundler=[bundler]`: 使用したいモジュールバンドルラーを指定する (例: --bundler=webpack). デフォルトは `webpack` です。
+- `--package_manager=[package manager]`: 使用するパッケージマネージャーを指定します（例：`--package_manager=yarn`）。デフォルトは `pnpm` です。
+- `--language=[language]`: 使用したい言語を指定する（例：`--language=javascript`）。デフォルト値は `typescript` です。
+- `--framework=[framework]`: 使用したいフレームワークを指定する（例：`--framework=react`）。デフォルト値は `none` です。
+- `--formatter=[formatter]`: 使用するコードフォーマッタを指定する（例：`--formatter=prettier`）。デフォルトは `prettier` です。
+- `--linter=[linter]`: 使用したいリンターを指定する（例：`--linter=eslint`）。デフォルトは `eslint` です。
+- `--bundler=[bundler]`: 使用したいモジュールバンドルラーを指定する (例: `--bundler=webpack`)。 デフォルトは `webpack` です。
+- `--test=[test]`: 使用したいテストを指定する (例: `--test=playwright`)。 デフォルトは `playwright` です.
 
 linter 引数は、`--linter=eslint,stylelint`のようにカンマで区切って複数の値を指定することができます。複数のリンターが指定された場合、スクリプトはそれぞれのリンターを適切に設定します。
 
@@ -48,28 +53,29 @@ linter 引数は、`--linter=eslint,stylelint`のようにカンマで区切っ�
 
 AutoEnvSetter は現在、以下のオプションに対応しています。
 
-- パッケージマネージャー：`npm`、`yarn`、`pnpm`。
-- プログラミング言語。`javascript`, `typescript`
-- フレームワークです。`none`, `react`
-- リンターです。`none`, `eslint`, `stylelint`
-- フォーマッタ。`none`, `prettier`
-- バンドラーです。`none`, `webpack`
+- パッケージマネージャー: `npm`、`yarn`、`pnpm`。
+- プログラミング言語: `javascript`, `typescript`
+- フレームワーク: `none`, `react`
+- リンター: `none`, `eslint`, `stylelint`
+- フォーマッタ: `none`, `prettier`
+- バンドラー: `none`, `webpack`
+- テスト: `none`, `jest`, `playwright`
 
 ### 使用例
 
-#### pnpm+typescript+eslint+prettier+webpack
+#### pnpm+typescript+eslint+prettier+webpack+playwright
 
 ```sh
 sh AutoEnvSetter/bin/install.sh
 ```
 
-#### pnpm+typescript+react+eslint+prettier+webpack
+#### pnpm+typescript+react+eslint+prettier+webpack+playwright
 
 ```sh
 sh AutoEnvSetter/bin/install.sh --framework=react
 ```
 
-#### pnpm+typescript+react+eslint+stylelint+prettier+webpack
+#### pnpm+typescript+react+eslint+stylelint+prettier+webpack+playwright
 
 ```sh
 sh AutoEnvSetter/bin/install.sh --framework=react --linter=eslint,stylelint
@@ -91,7 +97,7 @@ AutoEnvSetter を使用するには、以下のものが必要です。
 今後も AutoEnvSetter の開発を続け、新機能の追加や、より多くの言語、フレームワーク、ツールへの対応を予定しています。追加を予定している機能は以下の通りです。
 
 - [ ] 言語やフレームワークの追加サポート
-- [ ] テストフレームワークとの連携
+- [x] テストフレームワークとの連携
 - [ ] 自動デプロイメントスクリプト
 - [ ] brew インストーラーのように（ダウンロードせずに）動作する。
 
