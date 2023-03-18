@@ -1,5 +1,27 @@
 #!/bin/bash
 
+# Define text color constants
+# 文字色の定数を定義する
+RED='\033[31m'
+GREEN='\033[32m'
+YELLOW='\033[33m'
+BLUE='\033[34m'
+MAGENTA='\033[35m'
+CYAN='\033[36m'
+WHITE='\033[37m'
+GRAY='\033[90m'
+LIGHT_RED='\033[91m'
+LIGHT_GREEN='\033[92m'
+LIGHT_YELLOW='\033[93m'
+LIGHT_BLUE='\033[94m'
+LIGHT_MAGENTA='\033[95m'
+LIGHT_CYAN='\033[96m'
+LIGHT_WHITE='\033[97m'
+
+# Define exit code constants
+# 終了コードの定数を定義する
+END='\033[0m'
+
 # Get the directory path of a running shell script.
 # 実行中のシェルスクリプトのディレクトリパスを取得する
 SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
@@ -102,28 +124,28 @@ array_contains() {
 # Check if the package manager option is valid.
 # パッケージマネージャーオプションが有効かどうかチェックする
 if ! array_contains package_managers "$package_manager"; then
-  echo "The specified package manager, $package_manager, is not included in the available options: ${package_managers[*]}"
+  echo "${RED}The specified package manager, $package_manager, is not included in the available options: ${package_managers[*]}${END}"
   exit
 fi
 
 # Check if the language option is valid.
 # 言語オプションが有効かどうかチェックする
 if ! array_contains languages "$language"; then
-  echo "The specified language, $language, is not included in the available options: ${languages[*]}"
+  echo "${RED}The specified language, $language, is not included in the available options: ${languages[*]}${END}"
   exit
 fi
 
 # Check if the framework option is valid, if it's specified.
 # フレームワークオプションが有効かどうかチェックする（フレームワークが指定された場合）
 if ! array_contains frameworks "$framework"; then
-  echo "The specified framework, $framework, is not included in the available options: ${frameworks[*]}"
+  echo "${RED}The specified framework, $framework, is not included in the available options: ${frameworks[*]}${END}"
   exit
 fi
 
 # Check if the formatter option is valid, if it's specified.
 # フォーマッターオプションが有効かどうかチェックする（フォーマッターが指定された場合）
 if ! array_contains formatters "$formatter"; then
-  echo "The specified formatter, $formatter, is not included in the available options: ${formatters[*]}"
+  echo "${RED}The specified formatter, $formatter, is not included in the available options: ${formatters[*]}${END}"
   exit
 fi
 
@@ -133,7 +155,7 @@ for value in "${linter[@]}"
 do
   value=${value[0]}
   if ! array_contains linters "$value"; then
-    echo "The specified linter, $value, is not included in the available options: ${linters[*]}"
+    echo "${RED}The specified linter, $value, is not included in the available options: ${linters[*]}${END}"
     exit
   fi
 done
@@ -141,7 +163,14 @@ done
 # Check if the bundler option is valid, if it's specified.
 # バンドラーオプションが有効かどうかチェックする（バンドラーが指定された場合）
 if ! array_contains bundlers "$bundler"; then
-  echo "The specified bundler, $bundler, is not included in the available options: ${bundlers[*]}"
+  echo "${RED}The specified bundler, $bundler, is not included in the available options: ${bundlers[*]}${END}"
+  exit
+fi
+
+# Check if the test option is valid, if it's specified.
+# テストオプションが有効かどうかチェックする（テストが指定された場合）
+if ! array_contains tests "$test"; then
+  echo "${RED}The specified test, $test, is not included in the available options: ${tests[*]}${END}"
   exit
 fi
 
@@ -189,7 +218,7 @@ while [[ "$confirm" != "y" && "$confirm" != "Y" ]]; do
     *)
       # If the user enters anything else, exit the script.
       # ユーザーがそれ以外を入力した場合、スクリプトを終了する
-      echo "Aborting the process."
+      echo "${RED}Aborting the process.${END}"
       exit
       ;;
   esac
@@ -275,10 +304,10 @@ fi
 # Display the dependencies and development dependencies that will be installed.
 # インストールされる依存関係と開発用の依存関係を表示する。
 echo ""
-echo "Dependencies:"
+echo "${GREEN}Dependencies:${END}"
 echo "  ${dependencies[*]}"
 echo ""
-echo "Development Dependencies:"
+echo "${GREEN}Development Dependencies:${END}"
 echo "  ${dependencies_dev[*]}"
 echo ""
 echo "After the above packages are installed, the test library will be installed."
