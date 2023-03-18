@@ -445,8 +445,12 @@ if [[ $bundler == "webpack" ]]; then
   mkdir src
   mkdir dist
 
-  # Create initial index.html and styles.scss files.
-  # 初期のindex.htmlおよびstyles.scssファイルを作成する。
+  # Create .browserslistrc file
+  # .browserslistrcファイルを作成する
+  echo "defaults" > .browserslistrc
+
+  # Create initial index.html and index.scss files.
+  # 初期のindex.htmlおよびindex.scssファイルを作成する。
   touch src/index.html
   touch src/index.scss
   touch src/App.scss
