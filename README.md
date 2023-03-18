@@ -17,30 +17,35 @@ mkdir your/project/directory && cd your/project/directory
 
 2. Download the ZIP file from [here](https://github.com/HoshimuraYuto/AutoEnvSetter/archive/refs/heads/main.zip) to the root of your project directory.
 
+3. Unzip the file. Make sure the AutoEnvSetter folder is set up as follows
+
 ```
 🗂 (Project directory)
 └── 🗂 AutoEnvSetter
     ├── 🗂 bin
     │   └── 📄 install.sh
+    ├── ...
 ```
 
-3. Unzip the file.
 4. Run `sh AutoEnvSetter/bin/install.sh`.
 
 ```sh
 sh AutoEnvSetter/bin/install.sh
 ```
 
+5. If you choose playwright for your test, you will see `TODO: Please edit webServer in the playwright.config.ts file as follows.` Please follow the instructions. Please follow the instructions.
+
 ### Arguments
 
 You can pass in the following arguments:
 
-- `--package_manager=[package manager]`: Specify the package manager you want to use (e.g. --package_manager=yarn). The default value is `pnpm`.
-- `--language=[language]`: Specify the language you want to use (e.g. --language=javascript). The default value is `typescript`.
-- `--framework=[framework]`: Specify the framework you want to use (e.g. --framework=react). The default value is `none`.
-- `--formatter=[formatter]`: Specify the code formatter you want to use (e.g. --formatter=prettier). The default value is `prettier`.
-- `--linter=[linter]`: Specify the linter you want to use (e.g. --linter=eslint). The default value is `eslint`.
-- `--bundler=[bundler]`: Specify the module bundler you want to use (e.g. --bundler=webpack). The default value is `webpack`.
+- `--package_manager=[package manager]`: Specify the package manager you want to use (e.g. `--package_manager=yarn`). The default value is `pnpm`.
+- `--language=[language]`: Specify the language you want to use (e.g. `--language=javascript`). The default value is `typescript`.
+- `--framework=[framework]`: Specify the framework you want to use (e.g. `--framework=react`). The default value is `none`.
+- `--formatter=[formatter]`: Specify the code formatter you want to use (e.g. `--formatter=prettier`). The default value is `prettier`.
+- `--linter=[linter]`: Specify the linter you want to use (e.g. `--linter=eslint`). The default value is `eslint`.
+- `--bundler=[bundler]`: Specify the module bundler you want to use (e.g. `--bundler=webpack`). The default value is `webpack`.
+- `--test=[test]`: Specify the test you want to use (e.g. `--test=playwright`). The default value is `playwright`.
 
 The linter variable can accept multiple values separated by a comma, such as `--linter=eslint,stylelint`. If multiple linters are specified, the script will configure each linter accordingly.
 
@@ -54,22 +59,23 @@ AutoEnvSetter currently supports the following options:
 - Linter: `none`, `eslint`, `stylelint`
 - Formatter: `none`, `prettier`
 - Bundler: `none`, `webpack`
+- Test: `none`, `jest`, `playwright`
 
 ### Example Usage
 
-#### pnpm+typescript+eslint+prettier+webpack
+#### pnpm+typescript+eslint+prettier+webpack+playwright
 
 ```sh
 sh AutoEnvSetter/bin/install.sh
 ```
 
-#### pnpm+typescript+react+eslint+prettier+webpack
+#### pnpm+typescript+react+eslint+prettier+webpack+playwright
 
 ```sh
 sh AutoEnvSetter/bin/install.sh --framework=react
 ```
 
-#### pnpm+typescript+react+eslint+stylelint+prettier+webpack
+#### pnpm+typescript+react+eslint+stylelint+prettier+webpack+playwright
 
 ```sh
 sh AutoEnvSetter/bin/install.sh --framework=react --linter=eslint,stylelint
@@ -91,7 +97,7 @@ AutoEnvSetter requires the following:
 We plan to continue developing AutoEnvSetter to add new features and support for more languages, frameworks, and tools. Some features we plan to add include:
 
 - [ ] Support for additional languages and frameworks
-- [ ] Integration with testing frameworks
+- [x] Integration with testing frameworks
 - [ ] Automatic deployment scripts
 - [ ] Works like a brew installer (without downloading)
 

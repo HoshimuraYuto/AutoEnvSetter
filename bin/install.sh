@@ -174,13 +174,6 @@ if ! array_contains tests "$test"; then
   exit
 fi
 
-# Check if the test option is valid, if it's specified.
-# テストオプションが有効かどうかチェックする（テストが指定された場合）
-if ! array_contains tests "$test"; then
-  echo "The specified test, $test, is not included in the available options: ${tests[*]}"
-  exit
-fi
-
 # Display the selected options.
 # 選択されたオプションを表示する
 echo "package manager: $package_manager"
