@@ -14,14 +14,15 @@ else
   FILE_COPY_COMMAND=copy
 fi
 
-# Define available options for package managers, programming languages, frameworks, formatters, linters, and bundlers.
-# パッケージマネージャー、プログラミング言語、フレームワーク、フォーマッター、リンター、バンドラーの使用可能なオプションを定義する
+# Define available options for package managers, programming languages, frameworks, formatters, linters, bundlers and tests.
+# パッケージマネージャー、プログラミング言語、フレームワーク、フォーマッター、リンター、バンドラー, テストの使用可能なオプションを定義する
 package_managers=("npm" "yarn" "pnpm")
 languages=("typescript" "javascript")
 frameworks=("none" "react" "vue")
 formatters=("none" "prettier")
 linters=("none" "eslint" "stylelint")
 bundlers=("none" "webpack")
+tests=("none", "jest", "playwright")
 
 # Define default values for each option.
 # 各オプションのデフォルト値を設定する
@@ -31,6 +32,7 @@ default_framework=${frameworks[0]}
 default_formatter=${formatters[1]}
 default_linter=(${linters[1]})
 default_bundler=${bundlers[1]}
+default_test=${tests[2]}
 
 # Get values from command line arguments.
 # コマンドラインの引数から値を取得する
@@ -61,6 +63,10 @@ do
     bundler="${arg#*=}"
     shift
     ;;
+    --test=*)
+    test="${arg#*=}"
+    shift
+    ;;
     *)
     shift
     ;;
@@ -76,6 +82,7 @@ framework=${framework:-$default_framework}
 formatter=${formatter:-$default_formatter}
 linter=("${linter_list[@]:-$default_linter}")
 bundler=${bundler:-$default_bundler}
+test=${test:-$default_test}
 
 # Function to check if an array contains a value.
 # 配列内に値が存在するかチェックする関数
@@ -138,6 +145,13 @@ if ! array_contains bundlers "$bundler"; then
   exit
 fi
 
+# Check if the test option is valid, if it's specified.
+# テストオプションが有効かどうかチェックする（テストが指定された場合）
+if ! array_contains tests "$test"; then
+  echo "The specified test, $test, is not included in the available options: ${tests[*]}"
+  exit
+fi
+
 # Display the selected options.
 # 選択されたオプションを表示する
 echo "package manager: $package_manager"
@@ -146,6 +160,7 @@ echo "framework:       $framework"
 echo "formatter:       $formatter"
 echo "linter:          ${linter[@]}"
 echo "bundler:         $bundler"
+echo "test:            $test"
 
 # Verify that the path is correct before building the environment.
 # 環境構築の実行前にパスが正しいか確認する
@@ -266,6 +281,8 @@ echo ""
 echo "Development Dependencies:"
 echo "  ${dependencies_dev[*]}"
 echo ""
+echo "After the above packages are installed, the test library will be installed."
+echo ""
 
 # Add the dependencies.
 # 依存関係を追加する。
@@ -286,6 +303,39 @@ case $package_manager in
     pnpm i -D ${dependencies_dev[*]}
     ;;
 esac
+
+echo ""
+
+if [[ $test == "playwright" ]]; then
+  case $package_manager in
+    "npm")
+      if [[ $language == "typescript" ]]; then
+        npm init playwright@latest --yes -- --quiet --browser=chromium --browser=firefox --browser=webkit --gha
+      else
+        npm init playwright@latest --yes -- --quiet --browser=chromium --browser=firefox --browser=webkit --lang=js --gha
+      fi
+      node AutoEnvSetter/scripts/playwright_scripts/playwright.js "npx playwright test"
+      ;;
+    "yarn")
+      if [[ $language == "typescript" ]]; then
+        yarn create playwright --yes -- --quiet --browser=chromium --browser=firefox --browser=webkit --gha
+      else
+        yarn create playwright --yes -- --quiet --browser=chromium --browser=firefox --browser=webkit --lang=js --gha
+      fi
+      node AutoEnvSetter/scripts/playwright_scripts/playwright.js "yarn playwright test"
+      ;;
+    "pnpm")
+      if [[ $language == "typescript" ]]; then
+        pnpm dlx create-playwright --yes -- --quiet --browser=chromium --browser=firefox --browser=webkit --gha
+      else
+        pnpm dlx create-playwright --yes -- --quiet --browser=chromium --browser=firefox --browser=webkit --lang=js --gha
+      fi
+      node AutoEnvSetter/scripts/playwright_scripts/playwright.js "pnpm exec playwright test"
+      ;;
+  esac
+  echo ""
+  prettier --write package.json
+fi
 
 # If TypeScript is the language, create the tsconfig.json file using the appropriate package manager.
 # TypeScriptが使用されている場合、適切なパッケージマネージャーを使用して、tsconfig.jsonファイルを作成する。
@@ -401,3 +451,18 @@ if [[ $bundler == "webpack" ]]; then
   node AutoEnvSetter/scripts/webpack_scripts/_webpack.js
   prettier --write package.json
 fi
+
+echo ""
+echo "${LIGHT_CYAN}TODO: Please edit webServer in the playwright.config.ts file as follows.${END}"
+echo ""
+case $package_manager in
+  "npm")
+    echo "webServer: {command: 'npm run dev', port: 8080, reuseExistingServer: !process.env.CI},"
+    ;;
+  "yarn")
+    echo "webServer: {command: 'yarn dev', port: 8080, reuseExistingServer: !process.env.CI},"
+    ;;
+  "pnpm")
+    echo "webServer: {command: 'pnpm dev', port: 8080, reuseExistingServer: !process.env.CI},"
+    ;;
+esac
