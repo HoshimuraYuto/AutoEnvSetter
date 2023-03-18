@@ -369,7 +369,8 @@ if [[ $bundler == "webpack" ]]; then
   # Create initial index.html and styles.scss files.
   # 初期のindex.htmlおよびstyles.scssファイルを作成する。
   touch src/index.html
-  touch src/styles.scss
+  touch src/index.scss
+  touch src/App.scss
 
   $FILE_COPY_COMMAND AutoEnvSetter/configs/webpack_configs/postcss.config.js postcss.config.js
   if [[ $language == "typescript" ]]; then
@@ -377,25 +378,24 @@ if [[ $bundler == "webpack" ]]; then
       # For TypeScript + React
       # TypeScript + Reactの場合
       $FILE_COPY_COMMAND AutoEnvSetter/configs/webpack_configs/webpack.config-typescript-react.js webpack.config.js
-      touch src/index.tsx
+      $FILE_COPY_COMMAND AutoEnvSetter/configs/react_configs/react-typescript-index.tsx src/index.tsx
     else
       # For TypeScript
       # TypeScriptの場合
       $FILE_COPY_COMMAND AutoEnvSetter/configs/webpack_configs/webpack.config-typescript.js webpack.config.js
-      touch src/index.ts
+      echo 'import "./index.scss";' > src/index.ts
     fi
   else
     if [[ $framework == "react" ]]; then
     # For JavaScript + React
     # JavaScript + Reactの場合
      $FILE_COPY_COMMAND AutoEnvSetter/configs/webpack_configs/webpack.config-javascript-react.js webpack.config.js
-     $FILE_COPY_COMMAND AutoEnvSetter/configs/webpack_configs/.babelrc-javascript-react.js .babelrc.js
-     touch src/index.jsx
+     $FILE_COPY_COMMAND AutoEnvSetter/configs/react_configs/react-javascript-index.jsx src/index.jsx
     else
       # For JavaScript
       # JavaScript
       $FILE_COPY_COMMAND AutoEnvSetter/configs/webpack_configs/webpack.config-javascript.js webpack.config.js
-      touch src/index.js
+      echo 'import "./index.scss";' > src/index.js
     fi
   fi
   node AutoEnvSetter/scripts/webpack_scripts/_webpack.js
