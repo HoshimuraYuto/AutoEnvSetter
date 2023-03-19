@@ -41,6 +41,7 @@ fi
 package_managers=("npm" "yarn" "pnpm")
 languages=("typescript" "javascript")
 frameworks=("none" "react" "vue")
+libraries=("none" "tailwindcss")
 formatters=("none" "prettier")
 linters=("none" "eslint" "stylelint")
 bundlers=("none" "webpack")
@@ -51,6 +52,7 @@ tests=("none", "jest", "playwright")
 default_package_manager=${package_managers[2]}
 default_language=${languages[0]}
 default_framework=${frameworks[0]}
+default_library=${libraries[0]}
 default_formatter=${formatters[1]}
 default_linter=(${linters[1]})
 default_bundler=${bundlers[1]}
@@ -71,6 +73,10 @@ do
     ;;
     --framework=*)
     framework="${arg#*=}"
+    shift
+    ;;
+    --library=*)
+    library="${arg#*=}"
     shift
     ;;
     --formatter=*)
@@ -101,6 +107,7 @@ linter_list=(${linter//,/ })
 package_manager=${package_manager:-$default_package_manager}
 language=${language:-$default_language}
 framework=${framework:-$default_framework}
+library=${library:-$default_library}
 formatter=${formatter:-$default_formatter}
 linter=("${linter_list[@]:-$default_linter}")
 bundler=${bundler:-$default_bundler}
@@ -142,6 +149,13 @@ if ! array_contains frameworks "$framework"; then
   exit
 fi
 
+# Check if the library option is valid, if it's specified.
+# ライブラリーオプションが有効かどうかチェックする（フレームワークが指定された場合）
+if ! array_contains libraries "$library"; then
+  echo "${RED}The specified library, $library, is not included in the available options: ${libraries[*]}${END}"
+  exit
+fi
+
 # Check if the formatter option is valid, if it's specified.
 # フォーマッターオプションが有効かどうかチェックする（フォーマッターが指定された場合）
 if ! array_contains formatters "$formatter"; then
@@ -180,6 +194,7 @@ echo "package manager: $package_manager"
 echo "language:        $language"
 echo "framework:       $framework"
 echo "formatter:       $formatter"
+echo "library:         $library"
 echo "linter:          ${linter[@]}"
 echo "bundler:         $bundler"
 echo "test:            $test"
@@ -263,9 +278,18 @@ if [[ $framework == "react" ]]; then
   fi
 fi
 
+if [[ $library == "tailwindcss" ]]; then
+  readline_and_add_dependencies_dev "AutoEnvSetter/configs/tailwindcss_configs/tailwindcss-dev"
+fi
+
 # Add dependencies for Prettier.
 # Prettierの場合に依存関係を追加する
-readline_and_add_dependencies_dev "AutoEnvSetter/configs/prettier_configs/prettier-dev"
+if [[ $formatter == "prettier" ]]; then
+  readline_and_add_dependencies_dev "AutoEnvSetter/configs/prettier_configs/prettier-dev"
+  if [[ $library == "tailwindcss" ]]; then
+    readline_and_add_dependencies_dev "AutoEnvSetter/configs/tailwindcss_configs/tailwindcss-prettier-dev"
+  fi
+fi
 
 # Add dependencies for ESLint.
 # ESLintの場合に依存関係を追加する
@@ -495,6 +519,39 @@ if [[ $bundler == "webpack" ]]; then
   fi
   node AutoEnvSetter/scripts/webpack_scripts/_webpack.js
   prettier --write package.json
+fi
+
+if [[ $library == "tailwindcss" ]]; then
+  node AutoEnvSetter/scripts/tailwindcss_scripts/tailwindcss-postcss.js
+  prettier --write postcss.config.js
+  case $package_manager in
+    "npm")
+      npx tailwindcss init
+      ;;
+    "yarn")
+      yarn tailwindcss init
+      ;;
+    "pnpm")
+      pnpm tailwindcss init
+      ;;
+  esac
+  if [[ $language == "typescript" ]]; then
+    if [[ $framework == "react" ]]; then
+      node AutoEnvSetter/scripts/tailwindcss_scripts/tailwindcss.js tsx
+    else
+      node AutoEnvSetter/scripts/tailwindcss_scripts/tailwindcss.js ts
+    fi
+  else
+    if [[ $framework == "react" ]]; then
+      node AutoEnvSetter/scripts/tailwindcss_scripts/tailwindcss.js jsx
+    else
+      node AutoEnvSetter/scripts/tailwindcss_scripts/tailwindcss.js js
+    fi
+  fi
+  prettier --write tailwind.config.js
+  echo "@tailwind base;" >> src/index.scss
+  echo "@tailwind components;" >> src/index.scss
+  echo "@tailwind utilities;" >> src/index.scss
 fi
 
 echo ""
